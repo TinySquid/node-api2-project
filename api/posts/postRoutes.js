@@ -38,6 +38,23 @@ router.get('/:id', (req, res) => {
     });
 });
 
+//PUT 	/api/posts/:id 	Updates the post with the specified id using data from the request body. Returns the modified document.
+// router.put('/:id', (req, res) => {
+//   const id = req.params.id;
+
+//   db.findById(id)
+//     .then(post => {
+//       if (post.length > 0) {
+//         res.status(200).json(post);
+//       } else {
+//         res.status(404).json({ message: "Post with ID specified not found." });
+//       }
+//     })
+//     .catch(error => {
+//       res.status(500).json({ error: "The post information could not be retrieved." });
+//     });
+// });
+
 //POST 	/api/posts 	Creates a post using the information sent inside the request body.
 router.post('/', (req, res) => {
   const { title, contents } = req.body;
@@ -62,6 +79,31 @@ router.post('/', (req, res) => {
   } else {
     res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
   }
+});
+
+
+//DELETE 	/api/posts/:id 	Removes the post with the specified id and returns the deleted post object. 
+//You may need to make additional calls to the database in order to satisfy this requirement.
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
+
+  db.findById(id)
+    .then(post => {
+      if (post.length > 0) {
+        db.remove(id)
+          .then(() => {
+            res.status(200).json({ message: "Success" });
+          })
+          .catch(error => {
+            res.status(500).json({ error: "The post could not be removed." });
+          });
+      } else {
+        res.status(404).json({ message: "Post with ID specified not found." });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: "The post information could not be retrieved." });
+    });
 });
 
 
