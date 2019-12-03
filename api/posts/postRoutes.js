@@ -21,6 +21,32 @@ router.get('/', (req, res) => {
     });
 });
 
+//POST 	/api/posts 	Creates a post using the information sent inside the request body.
+router.post('/', (req, res) => {
+  const { title, contents } = req.body;
+
+  //Validate post content
+  if (title && contents) {
+    //Add to db
+    db.insert({ title: title, contents: contents })
+      .then(postID => {
+        // "Return newly created post..."
+        db.findById(postID.id)
+          .then(post => {
+            res.status(201).json(post);
+          })
+          .catch(error => {
+            res.status(500).json({ error: "There was an error retrieving post." });
+          });
+      })
+      .catch(error => {
+        res.status(500).json({ error: "There was an error while saving the post to the database." });
+      });
+  } else {
+    res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
+  }
+});
+
 
 
 //EXPORT ROUTES
