@@ -52,7 +52,7 @@ router.put('/:id', (req, res) => {
         // "Return newly created post..."
         db.findById(id)
           .then(post => {
-            res.status(201).json(post);
+            res.status(200).json(post);
           })
           .catch(error => {
             res.status(500).json({ error: "There was an error retrieving post." });
