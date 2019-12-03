@@ -48,15 +48,19 @@ router.put('/:id', (req, res) => {
   if (title && contents) {
     //update post in db.
     db.update(id, { title: title, contents: contents })
-      .then(() => {
-        // "Return newly created post..."
-        db.findById(id)
-          .then(post => {
-            res.status(200).json(post);
-          })
-          .catch(error => {
-            res.status(500).json({ error: "There was an error retrieving post." });
-          });
+      .then(result => {
+        if (result) {
+          // "Return newly created post..."
+          db.findById(id)
+            .then(post => {
+              res.status(200).json(post);
+            })
+            .catch(error => {
+              res.status(500).json({ error: "There was an error retrieving post." });
+            });
+        } else {
+          res.status(404).json({ message: "Post with specified ID not found." });
+        }
       })
       .catch(error => {
         res.status(500).json({ error: "There was an error while saving the post to the database." });
