@@ -5,6 +5,9 @@ const express = require('express');
 //Get CORS
 const cors = require('cors');
 
+//API ROUTES
+const apiRoutes = require('./api/apiRoutes');
+
 //PORT
 const port = process.env.PORT || 4000;
 
@@ -13,11 +16,14 @@ const server = express();
 
 //Body Parser
 server.use(express.json());
+
 //CORS
 server.use(cors());
 
+//USE API ROUTES
+server.use('/api', apiRoutes);
 
-
+//START SERVER
 server.listen(port, () => {
   console.log(`Server listening on port ${port}...`);
 });
